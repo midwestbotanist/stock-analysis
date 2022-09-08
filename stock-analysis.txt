@@ -300,7 +300,45 @@ Sub formatAllStocksAnalysisTable()
 End Sub
 
 
+Sub Checkerboard()
+
+    Worksheets("Checkerboard").Activate
+    
+    'Macro code based off of https://www.excel-pratique.com/en/vba/loops_continued
+    
+    'Number of cells to have background color added for 8x8
+    Const totalCells As Integer = 8
+    
+    Dim offRow As Integer
+    Dim offColor As Integer
+    
+    'Shifting from active cell is - 1
+    offRow = ActiveCell.Column - 1
+    
+    'Row number
+    For r = 1 To totalCells
+    
+        'Column number
+        For c = 1 To totalCells
+        
+            If (r + c) Mod 2 = 0 Then
+        
+            'Black
+            Cells(r + offRow, c + offColor).Interior.Color = RGB(0, 0, 0)
+        
+        Else
+            
+            'White
+            Cells(r + offRow, c + offColor).Interior.Color = RGB(255, 255, 255)
+            
+        End If
+        
+    Next c
+    
+   Next r
+    
 End Sub
+
 
 
 
