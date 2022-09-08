@@ -134,7 +134,7 @@ Sub AllStocksAnalysis()
         
             'Create a header row
         
-            Cells(3, 1).Value = "Year"
+            Cells(3, 1).Value = "Ticker"
         
             Cells(3, 2).Value = "Total Daily Volume"
         
@@ -242,5 +242,32 @@ Sub AllStocksAnalysis()
         
         
 End Sub
+
+
+Sub formatAllStocksAnalysisTable()
+
+    'Formatting
+    
+    Worksheets("All Stocks Analysis").Activate
+    
+    Range("A3:C3").Font.Bold = True
+    
+    Range("A3:C3").Borders(xlEdgeBottom).LineStyle = xlContinuous
+    
+    'Set color to dark blue
+    Range("A3:C3").Font.ColorIndex = 11
+    
+    Range("A3:C3").Font.FontStyle = "Bold Italic"
+    
+    Range("A3:C3").Font.Size = 16
+    
+    Range("B4:B15").NumberFormat = "$#,##0.00#"
+    
+    Range("C4:C15").NumberFormat = "0.0#%"
+    
+    Columns("B").AutoFit
+
+End Sub
+
 
 
