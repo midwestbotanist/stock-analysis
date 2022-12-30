@@ -1,344 +1,131 @@
 Sub MacroCheck()
 
     Dim testMessage As String
-    
+
     testMessage = "Hello World!"
 
     MsgBox (testMessage)
 
 End Sub
 
-Sub moduleTask()
-
-
-Worksheets("testPage").Activate
-
-'Make a list of square numbers
-
-For i = 1 To 10
-
-    Cells(1, i).Value = i * i
-
-Next i
-
-End Sub
-
-
-Sub DQAnalysis_1()
-    
-    Worksheets("DQ Analysis").Activate
-    
-    Range("A1").Value = "DAQO (Ticker:DQ)"
-    
-    Cells(3, 1).Value = "Year"
-    
-    Cells(3, 2).Value = "Total Daily Volume"
-    
-    Cells(3, 3).Value = "Return"
-
-End Sub
-
 Sub DQAnalysis()
 
+   '1) Format the output sheet on All Stocks Analysis worksheet
+   Worksheets("All Stocks Analysis").Activate
+   Range("A1").Value = "All Stocks (2018)"
+   'Create a header row
+   Cells(3, 1).Value = "Ticker"
+   Cells(3, 2).Value = "Total Daily Volume"
+   Cells(3, 3).Value = "Return"
 
-    Worksheets("DQ Analysis").Activate
+   '2) Initialize array of all tickers
+   Dim tickers(11) As String
+   tickers(0) = "AY"
+   tickers(1) = "CSIQ"
+   tickers(2) = "DQ"
+   tickers(3) = "ENPH"
+   tickers(4) = "FSLR"
+   tickers(5) = "HASI"
+   tickers(6) = "JKS"
+   tickers(7) = "RUN"
+   tickers(8) = "SEDG"
+   tickers(9) = "SPWR"
+   tickers(10) = "TERP"
+   tickers(11) = "VSLR"
+   '3a) Initialize variables for starting price and ending price
+   Dim startingPrice As Single
+   Dim endingPrice As Single
+   '3b) Activate data worksheet
+   Worksheets("2018").Activate
+   '3c) Get the number of rows to loop over
+   RowCount = Cells(Rows.Count, "A").End(xlUp).Row
 
+   '4) Loop through tickers
+   For i = 0 To 11
+       ticker = tickers(i)
+       totalVolume = 0
+       '5) loop through rows in the data
+       Worksheets("2018").Activate
+       For j = 2 To RowCount
+           '5a) Get total volume for current ticker
+           If Cells(j, 1).Value = ticker Then
 
-    Range("A1").Value = "DAQO (Ticker: DQ)"
+               totalVolume = totalVolume + Cells(j, 8).Value
 
+           End If
+           '5b) get starting price for current ticker
+           If Cells(j - 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
 
-    'Create header row
+               startingPrice = Cells(j, 6).Value
+
+           End If
+
+           '5c) get ending price for current ticker
+           If Cells(j + 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
+
+               endingPrice = Cells(j, 6).Value
+
+           End If
+       Next j
+       '6) Output data for current ticker
+       Worksheets("All Stocks Analysis").Activate
+       Cells(4 + i, 1).Value = ticker
+       Cells(4 + i, 2).Value = totalVolume
+       Cells(4 + i, 3).Value = endingPrice / startingPrice - 1
+
+   Next i
     
-    Cells(3, 1).Value = "Year"
-    
-    Cells(3, 2).Value = "Total Daily Volume"
-    
-    Cells(3, 3).Value = "Return"
-    
-    
-    Worksheets("2018").Activate
-
-
-    'set initial volume to zero
-    
-    totalVolume = 0
-
-    
-    Dim startingPrice As Double
-    
-    Dim endingPrice As Double
-
-
-    
-    'Establish the number of rows to loop over
-    
-    rowStart = 2
-    
-    rowEnd = Cells(Rows.Count, "A").End(xlUp).Row
-
-
-    
-    'loop over all the rows
-    
-    For i = rowStart To rowEnd
-
-
-        
-        If Cells(i, 1).Value = "DQ" Then
-
-
-            
-            'increase totalVolume by current row value
-            
-            totalVolume = totalVolume + Cells(i, 8).Value
-
-
-        End If
-
-
-        If Cells(i - 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then
- 
-            startingPrice = Cells(i, 6).Value
-
-        End If
-
-        
-        If Cells(i + 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then
-
-            endingPrice = Cells(i, 6).Value
-
-        End If
-
-    Next i
-
-    Worksheets("DQ Analysis").Activate
-    
-    Cells(4, 1).Value = 2018
-    
-    Cells(4, 2).Value = totalVolume
-    
-    Cells(4, 3).Value = (endingPrice / startingPrice) - 1
-
-
 End Sub
-
-Sub AllStocksAnalysis()
-
- '1. Format the output sheet on the "All Stocks Analysis" worksheet.
- 
-        Worksheets("All Stocks Analysis").Activate
-        
-        
-            Range("A1").Value = "All Stocks (2018)"
-        
-        
-            'Create a header row
-        
-            Cells(3, 1).Value = "Ticker"
-        
-            Cells(3, 2).Value = "Total Daily Volume"
-        
-            Cells(3, 3).Value = "Return"
-        
-  '2. Initialize an array of all tickers.
-        
-        'Remember numbering starts from 0, but total elements is 12
-        Dim tickers(12) As String
-        
-            tickers(0) = "AY"
-            
-            tickers(1) = "CSIQ"
-            
-            tickers(2) = "DQ"
-            
-            tickers(3) = "ENPH"
-            
-            tickers(4) = "FSLR"
-            
-            tickers(5) = "HASI"
-            
-            tickers(6) = "JKS"
-            
-            tickers(7) = "RUN"
-            
-            tickers(8) = "SEDG"
-            
-            tickers(9) = "SPWR"
-            
-            tickers(10) = "TERP"
-            
-            tickers(11) = "VSLR"
-            
-    '3. Prepare for the analysis of tickers.
-        'Initialize variables for the starting price and ending price.
-            
-            Dim startingPrice As Single
-           
-            Dim endingPrice As Single
-            
-         'Activate the data worksheet.
-           
-            Worksheets("2018").Activate
-           
-          'Find the number of rows to loop over.
-           
-            'https://stackoverflow.com/questions/33888725/double-nested-for-loops-in-excel-vba used to reference, but wasn't quite correct
-            RowCount = Cells(Rows.Count, "A").End(xlUp).Row
-            
-    '4. Loop through the tickers.
-            
-            For i = 0 To 11
-
-                    ticker = tickers(i)
-                    
-                    totalVolume = 0
-                    
-     ' 5. Loop through rows in the data.
-                   
-                    Worksheets("2018").Activate
-    
-                    For j = 2 To RowCount
-
-            'Find the total volume for the current ticker.
-
-                        If Cells(j, 1).Value = ticker Then
-
-                            totalVolume = totalVolume + Cells(j, 8).Value
-
-                        End If
-                       
-             'Find the starting price for the current ticker
-                        
-                        If Cells(j - 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
-
-                            startingPrice = Cells(j, 6).Value
-            
-                        End If
-
-              'Find the ending price for the current ticker.
-              
-                        If Cells(j + 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
-
-                            endingPrice = Cells(j, 6).Value
-
-                        End If
-
-                        
-                    Next j
-                    
-                    
-        ' 6. Output the data for the current ticker.
-              
-                    Worksheets("All Stocks Analysis").Activate
-                    
-                    Cells(4 + i, 1).Value = ticker
-                    
-                    Cells(4 + i, 2).Value = totalVolume
-                    
-                    Cells(4 + i, 3).Value = endingPrice / startingPrice - 1
-
-
-                Next i
-        
-        
-End Sub
-
 
 Sub formatAllStocksAnalysisTable()
 
     'Formatting
-    
     Worksheets("All Stocks Analysis").Activate
-    
-    Range("A3:C3").Font.Bold = True
-    
+    Range("A3:C3").Font.FontStyle = "Bold"
     Range("A3:C3").Borders(xlEdgeBottom).LineStyle = xlContinuous
-    
-    'Set color to dark blue
-    Range("A3:C3").Font.ColorIndex = 11
-    
-    Range("A3:C3").Font.FontStyle = "Bold Italic"
-    
-    Range("A3:C3").Font.Size = 16
-    
-    Range("B4:B15").NumberFormat = "$#,##0.00#"
-    
+    Range("B4:B15").NumberFormat = "$#,##0.0# "
     Range("C4:C15").NumberFormat = "0.0#%"
-    
     Columns("B").AutoFit
-
-    
-
-
+   
+   
     dataRowStart = 4
-    
     dataRowEnd = 15
-    
+     
     For i = dataRowStart To dataRowEnd
-
-
-
-        If Cells(i, 3) > 0 Then
     
+        If Cells(i, 3) > 0 Then
             'Color the cell green
             Cells(i, 3).Interior.Color = vbGreen
-
+            
         ElseIf Cells(i, 3) < 0 Then
-
             'Color the cell red
             Cells(i, 3).Interior.Color = vbRed
 
         Else
-    
             'Clear the cell color
             Cells(i, 3).Interior.Color = xlNone
-    
-        End If
 
+        End If
+   
     Next i
-
-End Sub
-
-
-Sub Checkerboard()
-
-    Worksheets("Checkerboard").Activate
-    
-    'Macro code based off of https://www.excel-pratique.com/en/vba/loops_continued
-    
-    'Number of cells to have background color added for 8x8
-    Const totalCells As Integer = 8
-    
-    Dim offRow As Integer
-    Dim offColor As Integer
-    
-    'Shifting from active cell is - 1
-    offRow = ActiveCell.Column - 1
-    
-    'Row number
-    For r = 1 To totalCells
-    
-        'Column number
-        For c = 1 To totalCells
-        
-            If (r + c) Mod 2 = 0 Then
-        
-            'Black
-            Cells(r + offRow, c + offColor).Interior.Color = RGB(0, 0, 0)
-        
-        Else
-            
-            'White
-            Cells(r + offRow, c + offColor).Interior.Color = RGB(255, 255, 255)
-            
-        End If
-        
-    Next c
-    
-   Next r
     
 End Sub
 
+Sub clearContents()
 
+    Rows(4).clearContents
+    Rows(5).clearContents
+    Rows(6).clearContents
+    Rows(7).clearContents
+    Rows(8).clearContents
+    Rows(9).clearContents
+    Rows(10).clearContents
+    Rows(11).clearContents
+    Rows(12).clearContents
+    Rows(13).clearContents
+    Rows(14).clearContents
+    Rows(15).clearContents
+    
+    Columns("C").Interior.Color = xlNone
 
-
+End Sub
