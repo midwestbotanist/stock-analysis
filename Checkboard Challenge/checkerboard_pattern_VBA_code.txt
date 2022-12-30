@@ -1,0 +1,94 @@
+Sub loops_exercise()
+'Code source: https://www.excel-pratique.com/en/vba/loops_continued
+
+    'Formatting row height for square shape
+    Worksheets("Checkerboard Practice").Activate
+    Worksheets("Checkerboard Practice").Columns.RowHeight = 47
+    
+    'Source for border format: https://www.mrexcel.com/board/threads/vba-for-borders.363225/
+    'Formatting thick black outside border
+    With Range("B2:I9")
+        With .Borders(xlEdgeLeft)
+            .LineStyle = xlContinuous
+            .Weight = xlThick
+            .ColorIndex = xlAutomatic
+        End With
+        With .Borders(xlEdgeTop)
+            .LineStyle = xlContinuous
+            .Weight = xlThick
+            .ColorIndex = xlAutomatic
+        End With
+        With .Borders(xlEdgeBottom)
+            .LineStyle = xlContinuous
+            .Weight = xlThick
+            .ColorIndex = xlAutomatic
+        End With
+        With .Borders(xlEdgeRight)
+            .LineStyle = xlContinuous
+            .Weight = xlThick
+            .ColorIndex = xlAutomatic
+        End With
+    End With
+    
+    
+    Const board = 9 'Cells to add colors to
+    
+    For r = 2 To board 'r = row number
+        
+        For c = 2 To board 'c = column number
+        
+            If (r + c) Mod 2 = 0 Then
+                Cells(r, c).Interior.Color = RGB(255, 255, 255) 'White
+            Else
+                Cells(r, c).Interior.Color = RGB(0, 0, 0) 'Black
+            End If
+        
+        Next c
+        
+    Next r
+
+
+
+End Sub
+
+Sub AddCharacters()
+    
+    'Formatting Font
+    Rows(2).Font.Color = vbRed
+    Rows(3).Font.Color = vbRed
+    Rows(8).Font.Color = vbBlue
+    Rows(9).Font.Color = vbBlue
+    
+    Columns("A:I").Font.Bold = True
+    Columns("A:I").Font.Size = 14
+    Columns("A:I").HorizontalAlignment = xlCenter
+    Columns("A:I").VerticalAlignment = xlCenter
+    
+    'Use Range to add chess pieces to board
+    Range("B3:I3").Value = "Pawn"
+    Range("B8:I8").Value = "Pawn"
+    
+    Range("B2,I2").Value = "Rook"
+    Range("B9,I9").Value = "Rook"
+    
+    Range("C2,H2").Value = "Knight"
+    Range("C9,H9").Value = "Knight"
+    
+    Range("D2,G2").Value = "Bishop"
+    Range("D9,G9").Value = "Bishop"
+    
+    Range("E2").Value = "Queen"
+    Range("E9").Value = "Queen"
+    
+    Range("F2").Value = "King"
+    Range("F9").Value = "King"
+
+End Sub
+
+Sub ClearPieces()
+
+    'Clear pieces from board
+    Cells.ClearContents
+
+End Sub
+
