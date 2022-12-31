@@ -73,6 +73,11 @@ End Sub
 
 Sub formatAllStocksAnalysisTable()
 
+    Dim startTime As Single
+    Dim endTime  As Single
+    
+    startTime = Timer
+
    '1) Format the output sheet on All Stocks Analysis worksheet
    Worksheets("All Stocks Analysis").Activate
    Range("A1").Value = "All Stocks (2018)"
@@ -170,7 +175,10 @@ Sub formatAllStocksAnalysisTable()
    
     Next i
     
-End Sub
+    endTime = Timer
+    MsgBox "This code ran in " & (endTime - startTime) & " seconds for the year " & (yearValue)
+    
+    End Sub
 
 Sub clearAllStocksAnalysis()
     
@@ -196,11 +204,16 @@ End Sub
 
 Sub yearValueAnalysis()
     
+    Dim startTime As Single
+    Dim endTime  As Single
+    
     'Current issue with this code is that an error is thrown if the user
     'inputs an incorrect date - requiring the code to be deleted and
     'restarted in order to reset the input
     
     yearValue = InputBox("What year would you like to run the analysis on?")
+    
+    startTime = Timer
 
     '1) Format the output sheet on All Stocks Analysis worksheet
     Worksheets("Year Analysis").Activate
@@ -302,6 +315,10 @@ Sub yearValueAnalysis()
         End If
    
     Next i
+    
+    endTime = Timer
+    MsgBox "This code ran in " & (endTime - startTime) & " seconds for the year " & (yearValue)
+    
     End Sub
 
 Sub ClearYearAnalysis()
